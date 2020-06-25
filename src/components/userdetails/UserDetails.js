@@ -23,8 +23,6 @@ export default class UserDetails extends Component {
 
     _getUserDetails(userId) {
         ApiConnector.getUserDetails(userId).then((response)=>{
-            
-            console.log(response)
             this.setState({
                 firstName: response.user.first_name,
                 lastName: response.user.last_name

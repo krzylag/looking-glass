@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Search from './components/search/Search';
 import UserDetails from './components/userdetails/UserDetails';
+import UserPosts from './components/userposts/UserPosts';
 
 export default class App extends Component {
     
@@ -20,9 +21,14 @@ export default class App extends Component {
                     onUserSelectedCallback={(selectedUserId)=>{this.setState({selectedUserId})}}
                 />
                 {this.state.selectedUserId!==null && 
-                    <UserDetails 
-                        userId={this.state.selectedUserId} 
-                    />
+                    <>
+                        <UserDetails 
+                            userId={this.state.selectedUserId} 
+                        />
+                        <UserPosts 
+                            userId={this.state.selectedUserId} 
+                        />
+                    </>
                 }
                 {this.state.selectedUserId===null && 
                     <small>start typing to search for specific last name</small>

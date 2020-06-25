@@ -15,7 +15,7 @@ import Axios from "axios";
  *                                    users: Array of users {id, firstName, lastName} 
  *                                  }
  */
-export default function _listUsers(serverUrl, accessToken, lastName = null, page = null) {
+export default function _getUsersList(serverUrl, accessToken, lastName = null, page = null) {
 
     return new Promise(function(resolve,reject) {
 

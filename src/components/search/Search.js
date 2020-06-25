@@ -29,7 +29,7 @@ export default class Search extends Component {
             this.typingTimeout=null;
         }
         this.typingTimeout = setTimeout(()=>{
-            ApiConnector.listUsers(filters).then((response)=>{
+            ApiConnector.getUsersList(filters).then((response)=>{
                 callbackOnLoaded(convertResponseToSelectOptions(response.users))
             })
         }, TYPING_DELAY_MS);
@@ -38,7 +38,7 @@ export default class Search extends Component {
 
 
     onUserSelected = (option) => {
-        console.log(option.value)
+        this.props.onUserSelectedCallback(option.value);
     }
 
 }   

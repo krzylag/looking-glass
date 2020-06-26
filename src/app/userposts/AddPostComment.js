@@ -46,7 +46,7 @@ export default class AddPostComment extends Component {
                             onChange={(e)=>this._changeFormValue({email: e.target.value})} 
                             placeholder="e-mail"
                         /><br />
-                        <button onClick={this._putComment} disabled={!this.state.isValid}>Save</button>
+                        <button onClick={this._postComment} disabled={!this.state.isValid}>Save</button>
                         <button onClick={this._toggleFormExpanded}>Cancel</button>
                         {this.state.errorMessage!==null && 
                             <div className="error-message">{this.state.errorMessage}</div>
@@ -70,7 +70,7 @@ export default class AddPostComment extends Component {
         this.setState(newState)
     }
 
-    _putComment = () => {
+    _postComment = () => {
         if (this.state.isValid) {
             this.setState({isProcessing: true}, ()=>{
                 ApiConnector.postPostComment(

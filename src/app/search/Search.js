@@ -41,4 +41,8 @@ export default class Search extends Component {
         this.props.onUserSelectedCallback(option.value);
     }
 
+    updateUserCache = (userId, newFirstName, newLastName) => {
+        // TODO: notyfy react-select about dataset update, preferably without re-fetching
+    }
+
 }   

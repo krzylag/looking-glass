@@ -10,6 +10,7 @@ export default class App extends Component {
         this.state = {
             selectedUserId: null
         }
+        this.searchRef = React.createRef();
     }
 
     render() {
@@ -19,11 +20,13 @@ export default class App extends Component {
                 <h2>Check what Your employees are doing in their free time!</h2>
                 <Search 
                     onUserSelectedCallback={(selectedUserId)=>{this.setState({selectedUserId})}}
+                    ref={this.searchRef}
                 />
                 {this.state.selectedUserId!==null && 
                     <>
                         <UserDetails 
                             userId={this.state.selectedUserId} 
+                            notifyUpdateUser={this._notifyUpdateUser}
                         />
                         <UserPosts 
                             userId={this.state.selectedUserId} 
@@ -37,5 +40,8 @@ export default class App extends Component {
         );
     }
 
+    _notifyUpdateUser(userId, newFirstName, newLastName) {
+        this.searchRef.current.updateUserCache(userId, newFirstName, newLastName);
+    }
 }
 

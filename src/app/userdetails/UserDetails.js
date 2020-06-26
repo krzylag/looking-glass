@@ -1,11 +1,17 @@
 import React, {Component} from 'react';
 import ApiConnector from '../../apiconnector/ApiConnector';
+import isUserValid from './isUserValid.function';
+import PleaseWait from '../../components/PleaseWait';
 
 export default class UserDetails extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            isExpanded: false,
+            isProcessing: false,
+            isValid: false,
+            errorMessage: null,
             firstName: '',
             lastName: ''
         }
@@ -17,15 +23,21 @@ export default class UserDetails extends Component {
 
     componentDidUpdate(prevProps) {
         if (prevProps.userId !== this.props.userId && this.props.userId!==null) {
-            this._getUserDetails(this.props.userId)
+            this.setState({firstName: '', lastName: ''}, ()=>{
+                this._getUserDetails(this.props.userId)
+            })
         }
     }
 
-    _getUserDetails(userId) {
+    _getUserDetails(userId, onDoneCallback=null) {
         ApiConnector.getUserDetails(userId).then((response)=>{
             this.setState({
                 firstName: response.user.first_name,
                 lastName: response.user.last_name
+            }, ()=>{
+                if (typeof onDoneCallback === 'function') {
+                    onDoneCallback(response.user.first_name, response.user.last_name)
+                }
             })
         })
     }
@@ -33,10 +45,71 @@ export default class UserDetails extends Component {
     render() {
         return (
             <div className="UserDetails">
-                <div>{this.state.firstName}</div>
-                <div>{this.state.lastName}</div>
+                {!this.state.isExpanded &&
+                    <button onClick={()=>this.setState({isExpanded: true})}>Edit user</button>
+                }
+                {this.state.isExpanded && this.state.isProcessing &&
+                    <PleaseWait />
+                }
+                {this.state.isExpanded && !this.state.isProcessing &&
+                    <>
+                        first name: 
+                        <input 
+                            type="text" 
+                            value={this.state.firstName} 
+                            onChange={(e)=>this._changeFormValue({firstName: e.target.value})}
+                        />
+                        last name: 
+                        <input 
+                            type="text" 
+                            value={this.state.lastName} 
+                            onChange={(e)=>this._changeFormValue({lastName: e.target.value})}
+                        />
+                        <button disabled={!this.state.isValid} onClick={this._putUser}>Save</button>
+                        <button onClick={()=>this.setState({isExpanded: false})}>Cancel</button>
+                        
+                        {this.state.errorMessage!==null && 
+                            <div className="error-message">{this.state.errorMessage}</div>
+                        }
+                    </>
+                }
             </div>
         );
+    }
+
+    _changeFormValue(what) {
+        let newState = Object.assign(
+            {firstName: this.state.firstName, lastName: this.state.lastName},
+            what
+        );
+        newState.isValid = isUserValid(newState);
+        this.setState(newState)
+    }
+
+    _putUser = () => {
+        if (this.state.isValid) {
+            this.setState({isProcessing: true},()=>{
+                ApiConnector.putUser(
+                    this.props.userId, 
+                    {firstName: this.state.firstName.trim(), lastName: this.state.lastName.trim()}
+                ).then(()=>{
+                    this._getUserDetails(this.props.userId, (newFirstName, newLastName)=>{
+                        this.setState({
+                            isProcessing: false, 
+                            errorMessage: null,
+                            isExpanded: false,
+                        });
+                        this.props.notifyUpdateUser(this.props.userId, newFirstName, newLastName)
+                    });
+                    
+                }).catch((error)=>{
+                    this.setState({
+                        isProcessing: false,
+                        errorMessage: error.message
+                    });
+                })
+            })
+        }
     }
 
 }   

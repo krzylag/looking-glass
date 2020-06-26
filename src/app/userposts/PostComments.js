@@ -7,7 +7,8 @@ export default class PostComments extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            comments: []
+            comments: [],
+            visible: false
         }
     }
 
@@ -17,14 +18,17 @@ export default class PostComments extends Component {
 
     componentDidUpdate(prevProps) {
         if (prevProps.postId !== this.props.postId && this.props.postId!==null) {
-            this._getPostComments(this.props.postId)
+            this.setState({visible: false}, ()=>{
+                this._getPostComments(this.props.postId)
+            })
         }
     }
 
     _getPostComments(postId) {
         ApiConnector.getPostComments(postId).then((response)=>{
             this.setState({
-                comments: response.comments
+                comments: response.comments,
+                visible: true
             })
         })
     }
@@ -33,16 +37,22 @@ export default class PostComments extends Component {
     render() {
         return (
             <div className="PostComments">
-                {this.state.comments.map((item)=>(
-                    <div key={item.id} className="Comment">
-                        <div>{item.body}</div>
-                        <small>{item.name}</small>
-                    </div>
-                ))}
-                <AddPostComment 
-                    postId={this.props.postId}
-                />
+                {this.state.visible &&
+                    <>
+                        {this.state.comments.map((item)=>(
+                            <div key={item.id} className="Comment">
+                                <div>{item.body}</div>
+                                <small>{item.name}</small>
+                            </div>
+                        ))}
+                        <AddPostComment 
+                            postId={this.props.postId}
+                            notifyReloadComments={()=>this._getPostComments(this.props.postId)}
+                        />
+                    </>
+                }
             </div>
         )
     }
+
 }

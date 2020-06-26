@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ApiConnector from '../../apiconnector/ApiConnector';
 import isCommentValid from './isCommentValid.function';
+import PleaseWait from '../../components/PleaseWait';
 
 export default class AddPostComment extends Component {
     
@@ -10,6 +11,7 @@ export default class AddPostComment extends Component {
             isExpanded: false,
             isProcessing: false,
             isValid: false,
+            errorMessage: null,
             body: '',
             name: '',
             email: ''
@@ -23,7 +25,10 @@ export default class AddPostComment extends Component {
                 {!this.state.isExpanded && 
                     <button onClick={this._toggleFormExpanded}>Add new comment</button>
                 }
-                {this.state.isExpanded && 
+                {this.state.isExpanded && this.state.isProcessing &&
+                    <PleaseWait />
+                }
+                {this.state.isExpanded && !this.state.isProcessing &&
                     <>
                         <textarea 
                             value={this.state.body} 
@@ -43,6 +48,9 @@ export default class AddPostComment extends Component {
                         /><br />
                         <button onClick={this._putComment} disabled={!this.state.isValid}>Save</button>
                         <button onClick={this._toggleFormExpanded}>Cancel</button>
+                        {this.state.errorMessage!==null && 
+                            <div className="error-message">{this.state.errorMessage}</div>
+                        }
                     </>
                 }
             </div>
@@ -72,8 +80,23 @@ export default class AddPostComment extends Component {
                         name: this.state.name.trim(),
                         email: this.state.email.trim()
                     }
-                ).then((response)=>{
-                    console.log(response.data)
+                ).then(()=>{
+                    this.setState({
+                        isExpanded: false,
+                        isProcessing: false,
+                        isValid: false,
+                        errorMessage: null,
+                        body: '',
+                        name: '',
+                        email: ''
+                    }, ()=>{
+                        this.props.notifyReloadComments();
+                    })
+                }).catch((error)=>{
+                    this.setState({
+                        isProcessing: false,
+                        errorMessage: error.message
+                    })
                 })
             })
         }

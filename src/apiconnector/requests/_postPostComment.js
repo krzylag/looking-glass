@@ -1,5 +1,4 @@
 import Axios from "axios";
-import PostComments from "../../components/userposts/PostComments";
 
 /**
  * Make API call to create new comment for selected post
@@ -55,7 +54,7 @@ export default function _postPostComment(serverUrl, accessToken, postId, body, n
                 code: error.status,
                 message: error.statusText,
             })
-            
+
         })
     });
 }

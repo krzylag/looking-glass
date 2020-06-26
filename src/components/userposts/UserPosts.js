@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import ApiConnector from '../../apiconnector/ApiConnector';
-import Post from './post/Post';
+import PostComments from './PostComments';
 
 export default class UserPosts extends Component {
 
@@ -13,7 +13,7 @@ export default class UserPosts extends Component {
     }
 
     componentDidMount() {
-        this._getUserPosts(this.props.userId);
+        if (this.props.userId!==null) this._getUserPosts(this.props.userId);
     }
 
     componentDidUpdate(prevProps) {
@@ -32,13 +32,20 @@ export default class UserPosts extends Component {
     }
 
     render() {
-        console.log(this.state)
         return (
             <div className="UserPosts">
-                displaying post {this.state.selectedPostIndex+1} / {this.state.cachedPosts.length}
-                <Post 
-                    data={this.state.cachedPosts[this.state.selectedPostIndex]}
-                />
+                {this.state.selectedPostIndex!==null &&
+                    <>
+                        displaying post {this.state.selectedPostIndex+1} / {this.state.cachedPosts.length}
+                        <div>
+                            <h3>{this.state.cachedPosts[this.state.selectedPostIndex].title}</h3>
+                            <div>{this.state.cachedPosts[this.state.selectedPostIndex].body}</div>
+                        </div>
+                        <PostComments 
+                            postId={this.state.cachedPosts[this.state.selectedPostIndex].id}
+                        />
+                    </>
+                }
             </div>
         );
     }

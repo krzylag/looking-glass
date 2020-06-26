@@ -1,11 +1,12 @@
 import Axios from "axios";
+import convertPaging from "../functions/convertPaging.function";
 
 /**
  * Make API call to browse specific user posts.
  * 
  * @param {string} serverUrl        Remote server address - domain only
  * @param {string} accessToken      Token for API authentication
- * @param {string|null} userId      Search for this user's posts
+ * @param {number|null} userId      Search for this user's posts
  * @param {number|null} page        If response is too long, request this page
  * 
  * @return {Promise}                Returns XHR status and fetched users list
@@ -28,26 +29,40 @@ export default function _getUserPosts(serverUrl, accessToken, userId, page = nul
         if (typeof page !== 'undefined' && page !== null) requestConfig.params.page = page;
 
         Axios.get(`${serverUrl}/public-api/posts`, requestConfig).then((response)=>{
-            console.log(response.data)
+
             // Success - format and return data 
-            resolve({
-                success: response.data._meta.success,
-                code: response.data._meta.code,
-                paging: {
-                    max: response.data._meta.pageCount,
-                    current: response.data._meta.currentPage,
-                    pageSize: response.data._meta.perPage
-                },
-                posts: response.data.result
-            });
+            if (response.data._meta.success) {
+                resolve({
+                    success: response.data._meta.success,
+                    code: response.data._meta.code,
+                    message: response.data._meta.message,
+                    paging: convertPaging(response.data._meta),
+                    posts: response.data.result
+                });
+            } 
+
+            // Data error, connection OK
+            else {
+                reject({
+                    success: response.data._meta.success,
+                    code: response.data._meta.code,
+                    message: response.data._meta.message,
+                    paging: null,
+                    posts: null
+                });
+            }
+
         }).catch((error)=>{
+
             // error - for example network failure
             reject({
                 success: false,
                 code: error.status,
-                paging: null,
                 message: error.statusText,
+                paging: null,
+                posts: null
             })
+            
         })
     });
 }

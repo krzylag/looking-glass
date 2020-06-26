@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import Search from './components/search/Search';
-import UserDetails from './components/userdetails/UserDetails';
-import UserPosts from './components/userposts/UserPosts';
+import Search from './search/Search';
+import UserDetails from './userdetails/UserDetails';
+import UserPosts from './userposts/UserPosts';
 
 export default class App extends Component {
     

@@ -9,7 +9,8 @@ export default class PostComments extends Component {
         super(props);
         this.state = {
             comments: [],
-            visible: false
+            visible: false,
+            errorMessage: null
         }
     }
 
@@ -33,6 +34,7 @@ export default class PostComments extends Component {
                 errorMessage: null
             })
         }).catch((error)=>{
+            console.log(error)
             this.setState({
                 errorMessage: error.message,
                 visible: false

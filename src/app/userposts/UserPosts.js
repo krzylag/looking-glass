@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import ApiConnector from '../../apiconnector/ApiConnector';
 import PostComments from './PostComments';
+import './UserPosts.scss'
 
 export default class UserPosts extends Component {
 
@@ -42,14 +43,16 @@ export default class UserPosts extends Component {
             <div className="UserPosts">
                 {this.state.selectedPostIndex!==null &&
                     <>
-                        {this.state.selectedPostIndex > 0 && 
-                            <button onClick={()=>this.setState({selectedPostIndex: this.state.selectedPostIndex-1})}>prev</button>
-                        }
-                        displaying post {this.state.selectedPostIndex+1} / {this.state.cachedPosts.length}
-                        {this.state.selectedPostIndex < (this.state.cachedPosts.length-1) && 
-                            <button onClick={()=>this.setState({selectedPostIndex: this.state.selectedPostIndex+1})}>next</button>
-                        }
-                        <div>
+                        <div className="controls">
+                            {this.state.selectedPostIndex > 0 && 
+                                <button onClick={()=>this.setState({selectedPostIndex: this.state.selectedPostIndex-1})}>prev</button>
+                            }
+                            displaying post {this.state.selectedPostIndex+1} / {this.state.cachedPosts.length}
+                            {this.state.selectedPostIndex < (this.state.cachedPosts.length-1) && 
+                                <button onClick={()=>this.setState({selectedPostIndex: this.state.selectedPostIndex+1})}>next</button>
+                            }
+                        </div>
+                        <div className="current-post">
                             <h3>{this.state.cachedPosts[this.state.selectedPostIndex].title}</h3>
                             <div>{this.state.cachedPosts[this.state.selectedPostIndex].body}</div>
                         </div>

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import ApiConnector from '../../apiconnector/ApiConnector';
 import isUserValid from './isUserValid.function';
 import PleaseWait from '../../components/PleaseWait';
+import './UserDetails.scss';
 
 export default class UserDetails extends Component {
 

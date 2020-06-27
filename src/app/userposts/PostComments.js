@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ApiConnector from '../../apiconnector/ApiConnector';
 import AddPostComment from './AddPostComment';
+import './PostComments.scss';
 
 export default class PostComments extends Component {
     
@@ -48,7 +49,7 @@ export default class PostComments extends Component {
                         {this.state.comments.map((item)=>(
                             <div key={item.id} className="Comment">
                                 <div>{item.body}</div>
-                                <small>{item.name}</small>
+                                <small className="author">{item.name}</small>
                             </div>
                         ))}
                         <AddPostComment 

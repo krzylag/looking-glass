@@ -40,7 +40,7 @@ export default class App extends Component {
         );
     }
 
-    _notifyUpdateUser(userId, newFirstName, newLastName) {
+    _notifyUpdateUser = (userId, newFirstName, newLastName) => {
         this.searchRef.current.updateUserCache(userId, newFirstName, newLastName);
     }
 }

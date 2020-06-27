@@ -1,0 +1,15 @@
+.PostComments {
+
+    .Comment {
+        max-width: 40em;
+        margin: 1em auto;
+
+        padding-bottom: 1em;    
+        border-bottom: 1px solid #ccc;
+
+        .author {
+            text-align: right;
+            margin-top: 0.5em;
+        }
+    }
+}

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ApiConnector from '../../apiconnector/ApiConnector';
 import isCommentValid from './isCommentValid.function';
 import PleaseWait from '../../components/PleaseWait';
+import './AddPostComment.scss';
 
 export default class AddPostComment extends Component {
     
@@ -30,22 +31,33 @@ export default class AddPostComment extends Component {
                 }
                 {this.state.isExpanded && !this.state.isProcessing &&
                     <>
-                        <textarea 
-                            value={this.state.body} 
-                            onChange={(e)=>this._changeFormValue({body: e.target.value})} 
-                        /><br />
-                        <input 
-                            type="text" 
-                            value={this.state.name} 
-                            onChange={(e)=>this._changeFormValue({name: e.target.value})} 
-                            placeholder="Your name"
-                        /><br />
-                        <input 
-                            type="email" 
-                            value={this.state.email} 
-                            onChange={(e)=>this._changeFormValue({email: e.target.value})} 
-                            placeholder="e-mail"
-                        /><br />
+                        <div className="table">
+                            <div className="row">
+                                <span>Comment:</span>
+                                <textarea 
+                                    value={this.state.body} 
+                                    onChange={(e)=>this._changeFormValue({body: e.target.value})} 
+                                />
+                            </div>
+                            <div className="row">
+                                <span>Your name:</span>
+                                <input 
+                                    type="text" 
+                                    value={this.state.name} 
+                                    onChange={(e)=>this._changeFormValue({name: e.target.value})} 
+                                    placeholder="name"
+                                />
+                            </div>
+                            <div className="row">
+                                <span>Valid email:</span>
+                                <input 
+                                    type="email" 
+                                    value={this.state.email} 
+                                    onChange={(e)=>this._changeFormValue({email: e.target.value})} 
+                                    placeholder="e-mail"
+                                />
+                            </div>
+                        </div>
                         <button onClick={this._postComment} disabled={!this.state.isValid}>Save</button>
                         <button onClick={this._toggleFormExpanded}>Cancel</button>
                         {this.state.errorMessage!==null && 

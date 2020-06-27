@@ -6,6 +6,8 @@
  * 
  * @param {Array} users         Array of users, in internal format [{id:integer, firstName:string, lastName:string}]
  * @param {Array} previous      Previous state. If not empty, "users" will be appended at end of it's clone.
+ * 
+ * @returns {Array}             New cloned users array, safe for setting React state.
  */
 export function convertResponseToSelectOptions(users, previous=[]) {
     let result = previous.map((item)=>{

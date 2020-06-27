@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ApiConnector from '../../apiconnector/ApiConnector';
+import ApiInterface from '../../apiinterface/ApiInterface';
 import AddPostComment from './AddPostComment';
 import './PostComments.scss';
 import PleaseWait from '../../components/PleaseWait';
@@ -30,7 +30,7 @@ export default class PostComments extends Component {
 
     _getPostComments(postId) {
         this.setState({ isApiFetchingNow: true }, ()=> {
-            ApiConnector.getPostComments(postId).then((response)=>{
+            ApiInterface.getPostComments(postId).then((response)=>{
                 this.setState({
                     comments: response.comments,
                     visible: true,

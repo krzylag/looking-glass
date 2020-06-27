@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ApiConnector from '../../apiconnector/ApiConnector';
+import ApiInterface from '../../apiinterface/ApiInterface';
 import isCommentValid from './isCommentValid.function';
 import PleaseWait from '../../components/PleaseWait';
 import './AddPostComment.scss';
@@ -85,7 +85,7 @@ export default class AddPostComment extends Component {
     _postComment = () => {
         if (this.state.isValid) {
             this.setState({isProcessing: true}, ()=>{
-                ApiConnector.postPostComment(
+                ApiInterface.postPostComment(
                     this.props.postId, 
                     {
                         body: this.state.body.trim(),

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import ApiConnector from '../../apiconnector/ApiConnector';
+import ApiInterface from '../../apiinterface/ApiInterface';
 import isUserValid from './isUserValid.function';
 import PleaseWait from '../../components/PleaseWait';
 import './UserDetails.scss';
@@ -31,7 +31,7 @@ export default class UserDetails extends Component {
     }
 
     _getUserDetails(userId, onDoneCallback=null) {
-        ApiConnector.getUserDetails(userId).then((response)=>{
+        ApiInterface.getUserDetails(userId).then((response)=>{
             this.setState({
                 firstName: response.user.first_name,
                 lastName: response.user.last_name,
@@ -93,7 +93,7 @@ export default class UserDetails extends Component {
     _putUser = () => {
         if (this.state.isValid) {
             this.setState({isProcessing: true},()=>{
-                ApiConnector.putUser(
+                ApiInterface.putUser(
                     this.props.userId, 
                     {firstName: this.state.firstName.trim(), lastName: this.state.lastName.trim()}
                 ).then(()=>{

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import ApiConnector from '../../apiconnector/ApiConnector';
+import ApiInterface from '../../apiinterface/ApiInterface';
 import { convertResponseToSelectOptions } from './convertResponseToSelectOptions.function';
 import AsyncSelect from 'react-select/async';
 
@@ -40,7 +40,7 @@ export default class Search extends Component {
             this.typingTimeout=null;
         }
         this.typingTimeout = setTimeout(()=>{
-            ApiConnector.getUsersList(filters).then((response)=>{
+            ApiInterface.getUsersList(filters).then((response)=>{
                 this.setState({errorMessage: null}, ()=>{
                     callbackOnLoaded(convertResponseToSelectOptions(response.users))
                 })

@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import ApiConnector from '../../apiconnector/ApiConnector';
 import { convertResponseToSelectOptions } from './options_functions';
-import { TYPING_DELAY_MS } from '../../index';
 import AsyncSelect from 'react-select/async';
+
+const TYPING_DELAY_MS = 1000;
 
 export default class Search extends Component {
 

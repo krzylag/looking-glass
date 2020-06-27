@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import ApiInterface from '../../apiinterface/ApiInterface';
-import isUserValid from './isUserValid.function';
+import { isUserValid } from './UserDetails.functions';
 import PleaseWait from '../../components/PleaseWait';
 import './UserDetails.scss';
 

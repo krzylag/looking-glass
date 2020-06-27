@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ApiInterface from '../../apiinterface/ApiInterface';
-import isCommentValid from './isCommentValid.function';
+import { isCommentValid } from './AddPostComment.functions';
 import PleaseWait from '../../components/PleaseWait';
 import './AddPostComment.scss';
 

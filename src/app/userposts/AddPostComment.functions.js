@@ -1,5 +1,5 @@
 
-export default function isCommentValid(comment) {
+export function isCommentValid(comment) {
     return (typeof comment.body === 'string' && comment.body.trim() !== ''
             && typeof comment.name === 'string' && comment.name.trim() !== ''
             && typeof comment.email === 'string' && _validateEmail(comment.email.trim())

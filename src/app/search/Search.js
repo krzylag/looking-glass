@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import ApiInterface from '../../apiinterface/ApiInterface';
-import { convertResponseToSelectOptions } from './convertResponseToSelectOptions.function';
+import { convertResponseToSelectOptions } from './Search.functions';
 import AsyncSelect from 'react-select/async';
 
 const TYPING_DELAY_MS = 1000;

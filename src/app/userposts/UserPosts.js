@@ -8,7 +8,8 @@ export default class UserPosts extends Component {
         super(props);
         this.state = {
             cachedPosts: [],
-            selectedPostIndex: null
+            selectedPostIndex: null,
+            errorMessage: null
         }
     }
 
@@ -28,8 +29,11 @@ export default class UserPosts extends Component {
         ApiConnector.getUserPosts(userId).then((response)=>{
             this.setState({
                 cachedPosts: response.posts,
-                selectedPostIndex: (response.posts.length>0 && this.state.selectedPostIndex===null) ? 0 : this.state.selectedPostIndex
+                selectedPostIndex: (response.posts.length>0 && this.state.selectedPostIndex===null) ? 0 : this.state.selectedPostIndex,
+                errorMessage: null
             })
+        }).catch((error)=>{
+            this.setState({errorMessage: error.message});
         })
     }
 
@@ -53,6 +57,9 @@ export default class UserPosts extends Component {
                             postId={this.state.cachedPosts[this.state.selectedPostIndex].id}
                         />
                     </>
+                }
+                {this.state.errorMessage!==null &&
+                    <div className="error-message">{this.state.errorMessage} Try again later.</div>
                 }
             </div>
         );

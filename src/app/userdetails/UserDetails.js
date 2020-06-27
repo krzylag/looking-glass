@@ -33,12 +33,15 @@ export default class UserDetails extends Component {
         ApiConnector.getUserDetails(userId).then((response)=>{
             this.setState({
                 firstName: response.user.first_name,
-                lastName: response.user.last_name
+                lastName: response.user.last_name,
+                errorMessage: null
             }, ()=>{
                 if (typeof onDoneCallback === 'function') {
                     onDoneCallback(response.user.first_name, response.user.last_name)
                 }
             })
+        }).catch((error)=>{
+            this.setState({errorMessage: error.message});
         })
     }
 
@@ -69,7 +72,7 @@ export default class UserDetails extends Component {
                         <button onClick={()=>this.setState({isExpanded: false})}>Cancel</button>
                         
                         {this.state.errorMessage!==null && 
-                            <div className="error-message">{this.state.errorMessage}</div>
+                            <div className="error-message">{this.state.errorMessage} Try again later.</div>
                         }
                     </>
                 }

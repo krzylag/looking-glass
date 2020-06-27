@@ -9,16 +9,24 @@ export default class Search extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            errorMessage: null
+        }
         this.typingTimeout=null;
     }
 
     render() {
         return (
-            <AsyncSelect 
-                defaultOptions 
-                loadOptions={this.loadOptions}
-                onChange={this.onUserSelected}
-            />
+            <>
+                <AsyncSelect 
+                    defaultOptions 
+                    loadOptions={this.loadOptions}
+                    onChange={this.onUserSelected}
+                />
+                {this.state.errorMessage!==null && 
+                    <div className="error-message">{this.state.errorMessage} Try again later.</div>
+                }
+            </>
         );
     }
 
@@ -31,7 +39,12 @@ export default class Search extends Component {
         }
         this.typingTimeout = setTimeout(()=>{
             ApiConnector.getUsersList(filters).then((response)=>{
-                callbackOnLoaded(convertResponseToSelectOptions(response.users))
+                this.setState({errorMessage: null}, ()=>{
+                    callbackOnLoaded(convertResponseToSelectOptions(response.users))
+                })
+            }).catch((error)=>{
+                console.log(error)
+                this.setState({errorMessage: error.message})
             })
         }, TYPING_DELAY_MS);
         

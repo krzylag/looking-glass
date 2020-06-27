@@ -49,7 +49,7 @@ export default class AddPostComment extends Component {
                         <button onClick={this._postComment} disabled={!this.state.isValid}>Save</button>
                         <button onClick={this._toggleFormExpanded}>Cancel</button>
                         {this.state.errorMessage!==null && 
-                            <div className="error-message">{this.state.errorMessage}</div>
+                            <div className="error-message">{this.state.errorMessage} Try again later.</div>
                         }
                     </>
                 }

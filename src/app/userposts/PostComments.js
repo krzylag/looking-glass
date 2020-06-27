@@ -28,7 +28,13 @@ export default class PostComments extends Component {
         ApiConnector.getPostComments(postId).then((response)=>{
             this.setState({
                 comments: response.comments,
-                visible: true
+                visible: true,
+                errorMessage: null
+            })
+        }).catch((error)=>{
+            this.setState({
+                errorMessage: error.message,
+                visible: false
             })
         })
     }
@@ -50,6 +56,9 @@ export default class PostComments extends Component {
                             notifyReloadComments={()=>this._getPostComments(this.props.postId)}
                         />
                     </>
+                }
+                {this.state.errorMessage!==null && 
+                    <div className="error-message">{this.state.errorMessage} Try again later.</div>
                 }
             </div>
         )

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ApiConnector from '../../apiconnector/ApiConnector';
 import AddPostComment from './AddPostComment';
 import './PostComments.scss';
+import PleaseWait from '../../components/PleaseWait';
 
 export default class PostComments extends Component {
     
@@ -10,6 +11,7 @@ export default class PostComments extends Component {
         this.state = {
             comments: [],
             visible: false,
+            isApiFetchingNow: false,
             errorMessage: null
         }
     }
@@ -27,19 +29,23 @@ export default class PostComments extends Component {
     }
 
     _getPostComments(postId) {
-        ApiConnector.getPostComments(postId).then((response)=>{
-            this.setState({
-                comments: response.comments,
-                visible: true,
-                errorMessage: null
+        this.setState({ isApiFetchingNow: true }, ()=> {
+            ApiConnector.getPostComments(postId).then((response)=>{
+                this.setState({
+                    comments: response.comments,
+                    visible: true,
+                    errorMessage: null,
+                    isApiFetchingNow: false
+                })
+            }).catch((error)=>{
+                console.log(error)
+                this.setState({
+                    errorMessage: error.message,
+                    visible: false,
+                    isApiFetchingNow: false
+                })
             })
-        }).catch((error)=>{
-            console.log(error)
-            this.setState({
-                errorMessage: error.message,
-                visible: false
-            })
-        })
+        });
     }
 
 
@@ -59,6 +65,9 @@ export default class PostComments extends Component {
                             notifyReloadComments={()=>this._getPostComments(this.props.postId)}
                         />
                     </>
+                }
+                {this.state.isApiFetchingNow && 
+                    <PleaseWait />
                 }
                 {this.state.errorMessage!==null && 
                     <div className="error-message">{this.state.errorMessage} Try again later.</div>

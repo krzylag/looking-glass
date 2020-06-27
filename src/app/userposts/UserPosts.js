@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import ApiConnector from '../../apiconnector/ApiConnector';
 import PostComments from './PostComments';
 import './UserPosts.scss'
+import PleaseWait from '../../components/PleaseWait';
 
 export default class UserPosts extends Component {
 
@@ -10,6 +11,7 @@ export default class UserPosts extends Component {
         this.state = {
             cachedPosts: [],
             selectedPostIndex: null,
+            isApiFetchingNow: false,
             errorMessage: null
         }
     }
@@ -27,14 +29,20 @@ export default class UserPosts extends Component {
     }
 
     _getUserPosts(userId) {
-        ApiConnector.getUserPosts(userId).then((response)=>{
-            this.setState({
-                cachedPosts: response.posts,
-                selectedPostIndex: (response.posts.length>0 && this.state.selectedPostIndex===null) ? 0 : this.state.selectedPostIndex,
-                errorMessage: null
+        this.setState({isApiFetchingNow: true}, () => {
+            ApiConnector.getUserPosts(userId).then((response)=>{
+                this.setState({
+                    cachedPosts: response.posts,
+                    selectedPostIndex: (response.posts.length>0 && this.state.selectedPostIndex===null) ? 0 : this.state.selectedPostIndex,
+                    errorMessage: null,
+                    isApiFetchingNow: false
+                })
+            }).catch((error)=>{
+                this.setState({
+                    errorMessage: error.message,
+                    isApiFetchingNow: false
+                });
             })
-        }).catch((error)=>{
-            this.setState({errorMessage: error.message});
         })
     }
 
@@ -60,6 +68,9 @@ export default class UserPosts extends Component {
                             postId={this.state.cachedPosts[this.state.selectedPostIndex].id}
                         />
                     </>
+                }
+                {this.state.isApiFetchingNow &&
+                    <PleaseWait />
                 }
                 {this.state.errorMessage!==null &&
                     <div className="error-message">{this.state.errorMessage} Try again later.</div>

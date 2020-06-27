@@ -10,7 +10,8 @@ export default class Search extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            errorMessage: null
+            errorMessage: null,
+            hackForceAsyncSelectToRefetchData: JSON.stringify(new Date())
         }
         this.typingTimeout=null;
     }
@@ -19,6 +20,7 @@ export default class Search extends Component {
         return (
             <>
                 <AsyncSelect 
+                    key={this.state.hackForceAsyncSelectToRefetchData}
                     defaultOptions 
                     loadOptions={this.loadOptions}
                     onChange={this.onUserSelected}
@@ -57,6 +59,12 @@ export default class Search extends Component {
 
     updateUserCache = (userId, newFirstName, newLastName) => {
         // TODO: notyfy react-select about dataset update, preferably without re-fetching
+        //       Apparently, passing notification to AsyncSelect component requires
+        //       some serious hacking.
+        //       I didn't knew this when I decided to use this library...
+        //       For now, use simple hack to re-render component if dataset changes,
+        //       this should suffice to pull new dataset from API
+        this.setState({hackForceAsyncSelectToRefetchData: JSON.stringify(new Date())})
     }
 
 }   
